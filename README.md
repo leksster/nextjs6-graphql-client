@@ -1541,6 +1541,95 @@ export default GithubLogin;
 `pages/auth/github/login.js`
 
 ```js
+import React from 'react';
+import getConfig from 'next/config';
+import { GithubLogin } from '../../../components';
+
+class Login extends React.Component {
+  static async getInitialProps({ res }) {
+    const { serverRuntimeConfig: { GithubClientId } } = getConfig();
+
+    if (res) {
+      res.writeHead(302, {
+        Location: `https://github.com/login/oauth/authorize?client_id=${GithubClientId}`,
+      });
+      res.end();
+    }
+
+    return {};
+  }
+
+  render() {
+    return (
+      <GithubLogin />
+    );
+  }
+}
+
+export default Login;
+```
+
+`getInitialProps` is an async static method. It can asynchronously fetch anything that resolves to a JavaScript plain Object, which populates props.
+
+Data returned from `getInitialProps` is serialized when server rendering, similar to a `JSON.stringify`. Make sure the returned object from `getInitialProps` is a plain Object and not using `Date`, `Map` or `Set`.
+
+For the initial page load, `getInitialProps` will execute on the server only. `getInitialProps` will only be executed on the client when navigating to a different route via the Link component or using the routing APIs.
+
+`__tests__/auth/github/login.test.js`
+
+```js
+import React from 'react';
+import renderer from 'react-test-renderer';
+import Login from '../../../pages/auth/github/login';
+
+describe('Github Login Page', () => {
+  it('matches snapshot', () => {
+    const component = renderer.create(<Login />);
+    const tree = component.toJSON();
+    expect(tree).toMatchSnapshot();
+  });
+});
+```
+
+Start with atom
+
+`components/atoms/Loader/index.js`
+
+```js
+import React from 'react';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
+const Loader = props => (
+  <CircularProgress {...props} />
+);
+
+export default Loader;
+```
+
+`components/templates/GithubLogin/index.js`
+
+```js
+import React from 'react';
+import { Grid } from '@material-ui/core';
+import { HeaderWithMenu, Loader } from '../..';
+
+const GithubLogin = () => (
+  <div>
+    <HeaderWithMenu />
+    <div style={{ padding: 12 }}>
+      <Grid direction="row" justify="center" container spacing={24} style={{ padding: 24 }}>
+        <Loader size={500} />
+      </Grid>
+    </div>
+  </div>
+);
+
+export default GithubLogin;
+```
+
+`pages/auth/github/login.js`
+
+```js
 
 ```
 
