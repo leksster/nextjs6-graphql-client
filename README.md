@@ -1475,7 +1475,13 @@ describe('Home Page', () => {
 });
 ```
 
-## Add github app secret keys
+## Authentication
+
+To communicate with github graphql api we need to create a github application first. Follow these steps to create your github app https://developer.github.com/apps/building-github-apps/creating-a-github-app/
+
+For development environment Homepage URL - http://localhost:3000, Authorization callback URL - http://localhost:3000/auth/github/callback
+
+#### Add github app secret keys
 
 We can use `next.config.js` for storing secret api keys. Which will be available only on server side.
 
@@ -1490,7 +1496,53 @@ module.exports = {
 };
 ```
 
+Add this file to `.gitignore`
 
+#### Github login page
+
+We need login page which will be just some kind of loader. The main purpose of this page is to make request to github authentication endpoint and redirect to our callback page.
+
+Start with atom
+
+`components/atoms/Loader/index.js`
+
+```js
+import React from 'react';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
+const Loader = props => (
+  <CircularProgress {...props} />
+);
+
+export default Loader;
+```
+
+`components/templates/GithubLogin/index.js`
+
+```js
+import React from 'react';
+import { Grid } from '@material-ui/core';
+import { HeaderWithMenu, Loader } from '../..';
+
+const GithubLogin = () => (
+  <div>
+    <HeaderWithMenu />
+    <div style={{ padding: 12 }}>
+      <Grid direction="row" justify="center" container spacing={24} style={{ padding: 24 }}>
+        <Loader size={500} />
+      </Grid>
+    </div>
+  </div>
+);
+
+export default GithubLogin;
+```
+
+`pages/auth/github/login.js`
+
+```js
+
+```
 
 ## Draft (remove later)
 
@@ -1522,6 +1574,59 @@ Add cookies manager lib
 
 ```
 yarn add js-cookie
+```
+
+For snapshot testing:
+
+```bash
+yarn add react-test-renderer -D
+```
+
+Add script into `package.json` to run tests:
+
+```js
+"scripts": {
+  "dev": "next",
+  "test": "NODE_ENV=test jest"
+}
+```
+
+
+Specify Jest Jest global variables in `.eslintrc.json`:
+
+```js
+{
+  "env": {
+    "jest": true
+  },
+  "extends": "airbnb"
+}
+```
+
+`.babelrc`:
+
+```js
+{
+  "env": {
+    "development": {
+      "presets": ["next/babel"]
+    },
+    "production": {
+      "presets": ["next/babel"]
+    },
+    "test": {
+      "presets": [["next/babel", { "preset-env": { "modules": "commonjs" } }]]
+    }
+  }
+}
+```
+
+## Material-UI
+
+Add material-ui for styled components to nextjs app
+
+```bash
+yarn add @material-ui/core
 ```
 
 ## Authentication
