@@ -4,5 +4,11 @@ import { Home } from '../..';
 
 storiesOf('templates/Home', module)
   .add('default', () => (
-    <Home />
+    <Home
+      cards={[
+        { title: 'foo', description: 'bar' },
+        { title: 'baz', description: 'craz' },
+        { title: 'saz', description: 'taz' },
+      ]}
+    />
   ));

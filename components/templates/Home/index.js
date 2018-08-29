@@ -15,41 +15,34 @@ const styles = {
 };
 
 class Home extends React.PureComponent {
-  state = {
-    loggedIn: true,
-  }
-
   static propTypes = {
     classes: PropTypes.shape({}).isRequired,
-    error: PropTypes.string,
+    cards: PropTypes.arrayOf(PropTypes.shape({
+      title: PropTypes.string,
+      description: PropTypes.string,
+    })),
   };
 
   static defaultProps = {
-    error: undefined,
-  };
-
-  handleLogIn = () => {
-    Router.push({
-      pathname: 'https://github.com/login/oauth/authorize',
-      query: {
-        client_id: process.env.GITHUB_CLIENT_ID,
-      },
-    });
+    cards: [],
   };
 
   render() {
-    // const { props: { classes, error }, state: { loggedIn }, handleLogIn } = this;
+    const { props: { cards } } = this;
 
     return (
       <div>
-        {/* <HeaderWithMenu loggedIn={loggedIn} handleLogIn={handleLogIn} /> */}
+        <HeaderWithMenu />
         <div style={{ padding: 12 }}>
-          {/* {error && <p>{error}</p>} */}
           <Grid container spacing={24} style={{ padding: 24 }}>
-            <Grid item xs={6} sm={4} lg={3} xl={2}>
-              asgasg
-              <SimpleCard title="Title" description="Description" />
-            </Grid>
+            {cards.map(card => (
+              <Grid key={card.title} item xs={6} sm={4} lg={3} xl={2}>
+                <SimpleCard
+                  title={card.title}
+                  description={card.description}
+                />
+              </Grid>
+            ))}
           </Grid>
         </div>
       </div>
