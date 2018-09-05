@@ -1,5 +1,6 @@
 import React from 'react';
 import App, { Container } from 'next/app';
+import fetch from 'isomorphic-unfetch';
 import { ApolloProvider } from 'react-apollo';
 import ApolloClient from 'apollo-boost';
 import Cookies from 'js-cookie';

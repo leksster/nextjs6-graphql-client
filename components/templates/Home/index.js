@@ -91,7 +91,6 @@ class Home extends React.PureComponent {
                 );
               }}
             </Query>
-
           </Grid>
         </div>
       </div>
